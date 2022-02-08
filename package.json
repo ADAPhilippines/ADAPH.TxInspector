@@ -2,13 +2,12 @@
   "name": "ADAPH.TxInspector",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
-    "start": "ts-node app.ts"
+    "start": "ts-node App.ts"
   },
   "author": "",
-  "license": "ISC",
   "dependencies": {
+    "@blockfrost/blockfrost-js": "^4.0.1",
     "@emurgo/cardano-serialization-lib-nodejs": "^10.0.1",
     "express": "^4.17.2"
   },
