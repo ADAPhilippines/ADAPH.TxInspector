@@ -15,3 +15,39 @@ export type TransactionUtxos = {
     data_hash: string | null;
   }[];
 }
+
+export type Address = {
+  address: string;
+  amount: {
+    unit: string;
+    quantity: string;
+  }[];
+  stake_address: string | null;
+  type: "byron" | "shelley";
+  script: boolean;
+}
+
+export type TxInput = {
+  txId: string;
+  txIdx: number;
+  address: string;
+  stakeAddress: string;
+  amount: {
+    quantity: string;
+    unit: string;
+  }[]
+}
+
+export type TxOutput = {
+  address: string,
+  amount: {
+    quantity: string,
+    unit: string
+  }[],
+  data_hash: string | null,
+}
+
+export type Amount = {
+  quantity: string,
+  unit: string
+}
