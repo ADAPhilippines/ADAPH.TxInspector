@@ -5,7 +5,7 @@ import config from "./config.json";
 import { toHex, getInputsAsync, getOutputs } from "./Utils";
 
 const app = express();
-const port = 3000;
+const port = config.Port;
 
 const blockfrostApi = new BlockFrostAPI({
   projectId: config.BlockfrostProjectId,
