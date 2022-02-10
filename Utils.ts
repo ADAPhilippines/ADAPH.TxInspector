@@ -1,6 +1,7 @@
 import * as Cardano from "@emurgo/cardano-serialization-lib-nodejs";
 import { TransactionUtxos, Address, TxInput, TxOutput, Amount } from "./Types";
 import { BlockFrostAPI } from "@blockfrost/blockfrost-js";
+import fetch from 'node-fetch';
 
 export const toHex = (input: Uint8Array) => {
   return Buffer.from(input).toString("hex");
@@ -27,11 +28,17 @@ export const getInputsAsync = async (tx: Cardano.Transaction, blockfrostApi: Blo
     const utxo = inputTxUtxo.outputs.find(o => o.output_index == txIdx);
 
     if (utxo !== undefined) {
-      let addressInfo = addresses.find(a => a.address = utxo.address);
+      let addressInfo = addresses.find(a => a.address == utxo.address);
       if (addressInfo === undefined) {
-        addressInfo = await blockfrostApi.addresses(utxo.address);
+          const result = await fetch(`https://cardano-mainnet.blockfrost.io/api/v0/addresses/${utxo.address.trim()}`, {
+            headers: {
+              "project_id": process.env.BLOCKFROST_PROJECT_ID
+            } as any,
+            method: "GET"
+          });
+          addressInfo = await result.json() as Address;
         if (addressInfo !== undefined)
-          addresses.push(addressInfo)
+          addresses.push(addressInfo);
       }
 
       inputs.push({
