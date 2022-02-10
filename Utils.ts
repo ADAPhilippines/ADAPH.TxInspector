@@ -30,7 +30,7 @@ export const getInputsAsync = async (tx: Cardano.Transaction, blockfrostApi: Blo
     if (utxo !== undefined) {
       let addressInfo = addresses.find(a => a.address == utxo.address);
       if (addressInfo === undefined) {
-          const result = await fetch(`https://cardano-mainnet.blockfrost.io/api/v0/addresses/${utxo.address.trim()}`, {
+          const result = await fetch(`https://cardano-mainnet.blockfrost.io/api/v0/addresses/${utxo.address}`, {
             headers: {
               "project_id": process.env.BLOCKFROST_PROJECT_ID
             } as any,
@@ -54,7 +54,7 @@ export const getInputsAsync = async (tx: Cardano.Transaction, blockfrostApi: Blo
   return inputs;
 }
 
-export const getOutputs = (tx: Cardano.Transaction) => {
+export const getOutputsAsync = async (tx: Cardano.Transaction) => {
   const txBody = tx.body();
   const rawOutputs = txBody.outputs();
   const outputs: TxOutput[] = [];
@@ -101,9 +101,18 @@ export const getOutputs = (tx: Cardano.Transaction) => {
       dataHash = toHex(rawDataHash.to_bytes());
     }
 
+    const result = await fetch(`https://cardano-mainnet.blockfrost.io/api/v0/addresses/${rawOutput.address().to_bech32()}`, {
+      headers: {
+        "project_id": process.env.BLOCKFROST_PROJECT_ID
+      } as any,
+      method: "GET"
+    });
+    const addressInfo = await result.json() as Address;
+
     outputs.push({
       amount: utxoAssets,
       address: rawOutput.address().to_bech32(),
+      stakeAddress: addressInfo.stake_address ?? "",
       data_hash: dataHash
     });
   }

@@ -1,7 +1,7 @@
 import express from "express";
 import * as Cardano from "@emurgo/cardano-serialization-lib-nodejs";
 import { BlockFrostAPI } from "@blockfrost/blockfrost-js";
-import { toHex, getInputsAsync, getOutputs } from "./Utils";
+import { toHex, getInputsAsync, getOutputsAsync } from "./Utils";
 
 const app = express();
 const port = process.env.PORT || 1337;
@@ -22,7 +22,7 @@ app.get("/", async (req, res) => {
     res.send({
       hash: txHash,
       inputs: await getInputsAsync(tx, blockfrostApi),
-      outputs: getOutputs(tx),
+      outputs: await getOutputsAsync(tx),
       size: txBytes.length,
       fee: txBody.fee().to_str(),
       metadata: {}

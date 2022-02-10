@@ -40,6 +40,7 @@ export type TxInput = {
 
 export type TxOutput = {
   address: string,
+  stakeAddress: string,
   amount: {
     quantity: string,
     unit: string
