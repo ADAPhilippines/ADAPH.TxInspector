@@ -86,7 +86,7 @@ export const getOutputsAsync = async (tx: Cardano.Transaction) => {
 
             if (quantity !== undefined) {
               utxoAssets.push({
-                unit: `${toHex(key.to_bytes())}${toHex(assetName.to_bytes())}`,
+                unit: `${toHex(key.to_bytes())}${toHex(assetName.to_bytes()).substring(2)}`,
                 quantity: quantity.to_str()
               });
             }
